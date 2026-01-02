@@ -1,0 +1,38 @@
+# Backend .gitignore
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+
+# Build & Runtime
+dist/
+build/
+*.tsbuildinfo
+
+# Prisma
+prisma/migrations/
+prisma/client/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+.tmp
+*.bak

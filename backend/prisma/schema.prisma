@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  nama_lengkap String
+  username     String   @unique
+  password     String
+  role         String
+  kelurahan    String?
+  createdAt    DateTime @default(now())
+}
+
+model NamaKelurahan {
+  id           Int    @id @default(autoincrement())
+  nama_kelurahan String @unique
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  label String
+
+  permissions RolePermission[]
+}
+
+model Permission {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  label String
+
+  roles RolePermission[]
+}
+
+model RolePermission {
+  id           Int @id @default(autoincrement())
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId])
+}
+
+model LogPerubahan {
+  id                Int      @id @default(autoincrement())
+  waktu             DateTime @default(now())
+  username_pengguna String
+  aksi              String
+  nama_tabel        String
+  id_data           Int
+}
+
+// Example data table (others can be created similarly)
+model DataPenerimaBantuan {
+  id       Int    @id @default(autoincrement())
+  kelurahan String
+  nama_penerima String
+  nik      String?
+  alamat   String?
+  tahun    Int?
+}
