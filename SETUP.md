@@ -53,7 +53,7 @@ NODE_ENV=development
     mysql://root:password@localhost:3306/db_kesos
     ```
 - `JWT_SECRET`: String panjang untuk signing access token (gunakan string random yang kuat)
-- `REFRESH_TOKEN_SECRET`: String untuk refresh token (beda dari JWT_SECRET)
+- `REFRESH_TOKEN_SECRET`: Secret untuk refresh cookie (disiapkan untuk kebutuhan auth lanjutan)
 - `PORT`: Port backend (default 4000)
 
 #### 2d. Setup database dan Prisma
@@ -69,22 +69,14 @@ Jika diminta nama migration, ketik `init` atau nama deskriptif lainnya.
 
 #### 2e. (Optional) Seed database dengan data awal
 ```bash
-# Jalankan seed script jika ada (akan ditambahkan di langkah berikutnya)
 npm run seed
 ```
 
-Atau, manual insert user awal via MySQL:
-```sql
--- Insert user master
-INSERT INTO users (nama_lengkap, username, password, role) 
-VALUES ('Admin Master', 'admin', '$2b$10$...', 'master');
-
--- Insert user operator kelurahan
-INSERT INTO users (nama_lengkap, username, password, role) 
-VALUES ('Operator Cigadung', 'op_cgd', '$2b$10$...', 'cgd');
-```
-
-(Password hash dapat dibuat dengan bcrypt. Lihat `_old_reference/tes_hash.php` untuk referensi.)
+Seed akan membuat:
+- Role & permission (RBAC dinamis)
+- Data kelurahan
+- User default (admin & operator)
+- Data dummy untuk tabel kategori
 
 #### 2f. Jalankan backend (development)
 ```bash
@@ -112,6 +104,16 @@ cd ../frontend
 npm install
 ```
 
+#### 3c. (Optional) Set API Base URL untuk ngrok / production
+Buat file `frontend/.env.local`:
+```env
+VITE_API_BASE_URL=http://localhost:4000/api
+```
+Jika memakai ngrok, ganti dengan URL backend ngrok:
+```
+VITE_API_BASE_URL=https://<ngrok-backend-url>/api
+```
+
 #### 3c. Jalankan dev server
 ```bash
 npm run dev
@@ -129,12 +131,21 @@ Frontend siap di `http://localhost:5173`
 
 ---
 
+### ✅ Jalankan Backend + Frontend Sekaligus (Opsional)
+
+Dari root project:
+```bash
+npm run dev
+```
+
+---
+
 ### 4️⃣ Test Aplikasi
 
 1. Buka browser ke `http://localhost:5173`
-2. Login dengan user yang sudah dibuat:
-   - Username: `admin` (atau `op_cgd` untuk operator)
-   - Password: sesuai dengan yang disetting di database
+2. Login dengan user default hasil seed:
+   - Admin: `admin` / `admin123`
+   - Operator: `op_cgd` / `password123`
 3. Jika login berhasil, akan redirect ke dashboard
 4. Coba lihat statistik, manajemen data, dan history log
 
@@ -154,12 +165,7 @@ Frontend siap di `http://localhost:5173`
 
 ### Frontend (bisa dalam `vite.config.ts` atau `.env`)
 
-Tidak ada `.env` khusus, tapi `vite.config.ts` sudah configure proxy:
-```typescript
-proxy: {
-  '/api': 'http://localhost:4000'
-}
-```
+Gunakan `.env.local` untuk override base URL saat memakai ngrok atau production.
 
 ---
 
@@ -203,7 +209,7 @@ proxy: {
 ```bash
 curl -X POST http://localhost:4000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"password123"}'
+  -d '{"username":"admin","password":"admin123"}'
 ```
 
 Response:
@@ -215,7 +221,7 @@ Response:
     "id": 1,
     "nama": "Admin Master",
     "username": "admin",
-    "role": "master"
+    "role": "admin"
   }
 }
 ```
