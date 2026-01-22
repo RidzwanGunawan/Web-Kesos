@@ -104,7 +104,6 @@ prisma/
 Backend menggunakan JWT (JSON Web Tokens) untuk API authentication:
 
 1. **Access Token:** Short-lived (15 minutes), dikirim dalam header `Authorization: Bearer <token>`
-2. **Refresh Token:** Long-lived (7 days), disimpan dalam httpOnly cookie, digunakan untuk rotate access token
 
 ### Login Flow
 ```
@@ -141,7 +140,7 @@ npm run seed      # Seed database with initial data
 |----------|----------|---------|-------------|
 | `DATABASE_URL` | Yes | - | MySQL connection URL |
 | `JWT_SECRET` | Yes | - | Secret key for JWT signing |
-| `REFRESH_TOKEN_SECRET` | Yes | - | Secret key for refresh token |
+| `REFRESH_TOKEN_SECRET` | Yes | - | Secret key for refresh cookie |
 | `PORT` | No | 4000 | Server port |
 | `NODE_ENV` | No | development | Environment mode |
 
