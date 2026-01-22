@@ -20,7 +20,7 @@
 - **Framework:** Express.js (TypeScript)
 - **Database:** MySQL 8.0+
 - **ORM:** Prisma
-- **Auth:** JWT (Access Token) + Refresh Token (httpOnly Cookie)
+- **Auth:** JWT (Access Token)
 - **Validation:** Zod / Manual schemas
 - **Security:** bcrypt (password hashing), CORS, middleware auth + RBAC dinamis
 
@@ -75,7 +75,7 @@ Lihat [SETUP.md](./SETUP.md) untuk panduan lengkap setup, konfigurasi database, 
 
 ### 1. **Autentikasi & Otorisasi**
    - Login dengan username + password
-   - JWT access token (15 menit) + refresh token (7 hari, httpOnly cookie)
+   - JWT access token (15 menit)
    - Role-based access control (RBAC) dinamis:
      - **Admin:** akses penuh + manajemen role, user, kelurahan
      - **Operator:** akses terbatas ke kelurahan sendiri
@@ -113,13 +113,13 @@ Lihat [SETUP.md](./SETUP.md) untuk panduan lengkap setup, konfigurasi database, 
 - ✅ Prepared statements (Prisma) untuk mencegah SQL Injection
 - ✅ CORS configured untuk kontrol akses cross-origin
 - ✅ RBAC middleware dengan permission berbasis DB
-- ✅ httpOnly cookies untuk refresh token (proteksi XSS)
 - ✅ Rate limiting untuk login endpoint (rekomendasi)
 
 ## 📝 Catatan untuk Development
 
 - Database schema di-manage oleh Prisma (`prisma/schema.prisma`)
 - Gunakan `npm run dev` di backend dan frontend untuk development dengan hot-reload
+- Atau jalankan keduanya dari root: `npm run dev:all`
 - API backend berjalan di `http://localhost:4000`
 - Frontend dev server di `http://localhost:5173` (dengan proxy ke `/api`)
 - Gunakan Docker Compose untuk setup database MySQL lokal
