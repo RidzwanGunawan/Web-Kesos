@@ -59,7 +59,6 @@ src/
 ### Authentication
 - Login form dengan username + password
 - JWT token stored in memory/sessionStorage
-- Auto-refresh token using refresh endpoint
 - Logout functionality
 
 ### Pages
@@ -131,32 +130,13 @@ const data = await api.get(`/data/data_paud`, { params: { kelurahan } })
 await api.post(`/data/data_paud`, { nama, alamat, jumlah, tahun, kelurahan })
 
 // Update
-await api.put(`/data/data_paud/1`, { nama_sekolah, ... })
+await api.put(`/data/data_paud/1`, { nama, alamat, jumlah, tahun })
 
 // Delete
 await api.delete(`/data/data_paud/1`)
 ```
 
 Setiap request otomatis include `Authorization: Bearer <token>` header.
-
-## 📝 Component Examples
-
-### Login Form
-```tsx
-import LoginForm from '@/components/LoginForm'
-<LoginForm onSuccess={() => navigate('/dashboard')} />
-```
-
-### Data Table
-```tsx
-import DataTable from '@/components/DataTable'
-<DataTable 
-  data={records} 
-  columns={['nama_sekolah', 'alamat', 'jumlah_siswa']} 
-  onEdit={handleEdit}
-  onDelete={handleDelete}
-/>
-```
 
 ## 🐛 Troubleshooting
 
@@ -166,8 +146,7 @@ import DataTable from '@/components/DataTable'
 - Restart dev server
 
 ### ❌ Token expired
-- Implement automatic token refresh using refresh token endpoint
-- Clear localStorage/sessionStorage and re-login
+- Clear localStorage/sessionStorage dan login ulang
 
 ### ❌ 404 Not Found for API
 - Verify backend is running
